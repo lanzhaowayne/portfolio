@@ -1,12 +1,7 @@
 @layer base {
-    html, body {
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        font-family: 'Noto Sans TC', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-        line-height: 1.5;
-        font-weight: 400;
-        scroll-behavior: smooth;
+    :root {
         --bg-color: #fff;
+        --bg-color-rgb: 255 255 255;
         --text-color: #222;
         --text-color-rgb: 34 34 34;
         --accent-color: #f29f05;
@@ -17,11 +12,47 @@
         --nav-logo-text-size: 1rem;
         --nav-func-icon-size: 1.75rem;
         --nav-size: calc(var(--nav-logo-size) + 12px);
+    }
+    html, body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family: 'Noto Sans TC', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        line-height: 1.5;
+        font-weight: 400;
+        scroll-behavior: smooth;
         &:has(.dialog[open]) {
             overflow: hidden;
         }
     }
-    body.body-off-top {
+    @media (prefers-color-scheme: light) {
+        html {
+            --bg-color: #fff;
+            --bg-color-rgb: 255 255 255;
+            --text-color: #222;
+            --text-color-rgb: 34 34 34;
+        }
+    }
+    @media (prefers-color-scheme: dark) {
+        html{
+            --bg-color: #222;
+            --bg-color-rgb: 34 34 34;
+            --text-color: #fff;
+            --text-color-rgb: 255 255 255;
+        }
+    }
+    html.theme-light {
+        --bg-color: #fff;
+        --bg-color-rgb: 255 255 255;
+        --text-color: #222;
+        --text-color-rgb: 34 34 34;
+    }
+    html.theme-dark {
+        --bg-color: #222;
+        --bg-color-rgb: 34 34 34;
+        --text-color: #fff;
+        --text-color-rgb: 255 255 255;
+    }
+    html.html-off-top {
         --nav-stroke-width: 30px;
         --nav-logo-size: 30px;
         --nav-logo-text-size: 0.85rem;
@@ -31,6 +62,7 @@
         &, &:before, &:after {
             margin: 0;
             box-sizing: border-box;
+            color: inherit
         }
     }
     a, button {
@@ -211,7 +243,6 @@
                             background-color: rgb(var(--text-color-rgb) / .15);
                         }
                         &.is-active {
-                            // color: var(--bg-color);
                             background-color: rgb(var(--text-color-rgb) / .15);
                             box-shadow: rgb(var(--text-color-rgb) / .25) 0 0 8px inset;
                         }
@@ -220,6 +251,37 @@
                             transform: all .2s var(--timing-function) .2s;
                         }
                     }
+                }
+            }
+        }
+    }
+    .dropdown {
+        position: relative;
+        &-menu {
+            display: none;
+            flex-direction: column;
+            gap: 0.25rem;
+            list-style-type: none;
+            padding: 0.5rem;
+            background-color: rgb(var(--bg-color-rgb) / .5);
+            backdrop-filter: blur(2rem);
+            position: absolute;
+            top: calc(var(--nav-func-icon-size) + 1rem);
+            right: 0;
+            border-radius: 1.5rem;
+            &.is-active {
+                display: flex;
+            }
+            button {
+                display: flex;
+                align-items: center;
+                border-radius: 500em;
+                svg {
+                    flex: 0 0 auto;
+                }
+                span {
+                    padding-inline: 0.5rem;
+                    text-wrap: nowrap;
                 }
             }
         }
@@ -338,7 +400,7 @@
     footer {
         padding: 24px 0;
         text-align: center;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         font-weight: 300;
     }
 }
@@ -377,21 +439,22 @@
         position: fixed;
         top: 0;
         border: none;
-        background-color: rgb(255 255 255 / .1);
+        background-color: rgb(var(--bg-color-rgb) / .1);
         backdrop-filter: blur(10rem);
         &.dialog-end {
-            display: flex;
+            --transform: translateY(100%);
+            display: none;
             justify-content: flex-end;
-            transform: translateY(100%);
-            transition: all .2s ease-in-out .2s;
             backdrop-filter: blur(1rem);
-            background-color: rgb(255 255 255 / .1);
+            background-color: rgb(var(--bg-color-rgb) / .1);
             &.is-active {
-                transform: translateY(0);
+                display: flex;
+                --transform: translateY(0);
             }
             .dialog-inner {
+                transition: transform .2s ease-in-out .2s;
                 border-left: var(--bg-color) solid 1px;
-                background-color: rgb(255 255 255 / .9);
+                background-color: rgb(var(--bg-color-rgb) / .9);
                 @media (min-width: 992px) {
                     width: calc(100% / 3);
                 }
@@ -419,7 +482,7 @@
                 position: absolute;
                 top: 84px;
                 right: 24px;
-                background-color: rgb(255 255 255  / .5);
+                background-color: rgb(var(--bg-color-rgb) / .5);
                 border: none;
                 z-index: 10;
                 border-radius: 50%;
@@ -428,10 +491,11 @@
                 span {
                     width: 1rem;
                     height: 1rem;
-                    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414'/%3e%3c/svg%3e");
-                    background-size: cover;
-                    background-position: center center;
-                    background-repeat: no-repeat;
+                    background-color: var(--text-color);
+                    mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414'/%3e%3c/svg%3e");
+                    mask-size: cover;
+                    mask-position: center center;
+                    mask-repeat: no-repeat;
                 }
                 &:hover, &:focus, &:active {
                     opacity: 1;
@@ -468,7 +532,7 @@
             &-button {
                 display: flex;
                 padding: 0.5rem;
-                background-color: rgb(255 255 255  / .5);
+                background-color: rgb(var(--bg-color-rgb) / .5);
                 border: none;
                 z-index: 10;
                 border-radius: 50%;
@@ -477,10 +541,11 @@
                 span {
                     width: 1rem;
                     height: 1rem;
-                    background-size: cover;
-                    background-position: center center;
-                    background-repeat: no-repeat;
-                    background-image: var(--nav-bg);
+                    background-color: var(--text-color);
+                    mask-size: cover;
+                    mask-position: center center;
+                    mask-repeat: no-repeat;
+                    mask-image: var(--nav-bg);
                 }
                 &.dialog-prev {
                     --nav-bg: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23000"><path d="M0 0h24v24H0V0z" fill="none" opacity=".87"/><path d="M16.62 2.99c-.49-.49-1.28-.49-1.77 0L6.54 11.3c-.39.39-.39 1.02 0 1.41l8.31 8.31c.49.49 1.28.49 1.77 0s.49-1.28 0-1.77L9.38 12l7.25-7.25c.48-.48.48-1.28-.01-1.76z"/></svg>');
@@ -493,10 +558,17 @@
                 }
                 &:hover, &:focus, &:active {
                     opacity: 1;
-                    background-color: rgb(255 255 255  / .75);
+                    background-color: rgb(var(--bg-color-rgb) / .75);
                 }
                 &.is-active {
-                    background-color: rgb(255 255 255  / .75);
+                    background-color: rgb(var(--bg-color-rgb) / .75);
+                }
+                &.theme-toggle {
+                    &.is-active {
+                        background-color: transparent;
+                        position: relative;
+                        z-index: 1;
+                    }
                 }
             }
         }
@@ -506,9 +578,6 @@
             overflow-y: auto;
             position: relative;
             z-index: 1;
-            &::-webkit-scrollbar-track {
-                background: pink;
-            }
         }
         &-row {
             --gap: 2em;
