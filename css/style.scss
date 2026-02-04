@@ -515,10 +515,12 @@
                 padding-inline: 8px; 
                 align-items: center;
                 border-radius: 500em;
-                border: #ccc solid 1px;
+                border: var(--text-color) solid 1px;
                 background-color: transparent;
                 &:hover, &:focus, &:active {
                     background-color: var(--accent-color);
+                    border-color: var(--accent-color);
+                    color: var(--bg-color);
                 }
                 svg {
                     flex: 0 0 auto;
