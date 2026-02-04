@@ -30,6 +30,8 @@
       --bg-color-rgb: 255 255 255;
       --text-color: #222;
       --text-color-rgb: 34 34 34;
+      --accent-color: #f29f05;
+      --accent-color-rgb: 242 159 5;
     }
   }
   @media (prefers-color-scheme: dark) {
@@ -38,6 +40,8 @@
       --bg-color-rgb: 34 34 34;
       --text-color: #fff;
       --text-color-rgb: 255 255 255;
+      --accent-color: #2cff05;
+      --accent-color-rgb: 44 255 5;
     }
   }
   html.theme-light {
@@ -45,12 +49,16 @@
     --bg-color-rgb: 255 255 255;
     --text-color: #222;
     --text-color-rgb: 34 34 34;
+    --accent-color: #f29f05;
+    --accent-color-rgb: 242 159 5;
   }
   html.theme-dark {
     --bg-color: #222;
     --bg-color-rgb: 34 34 34;
     --text-color: #fff;
     --text-color-rgb: 255 255 255;
+    --accent-color: #2cff05;
+    --accent-color-rgb: 44 255 5;
   }
   html.html-off-top {
     --nav-stroke-width: 30px;
@@ -680,6 +688,8 @@
        -moz-appearance: none;
             appearance: none;
     clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+    width: 0;
+    height: 0;
   }
   .dialog-tab-list label {
     display: block;
@@ -687,12 +697,14 @@
     padding: 0.125rem 0.5rem;
     position: relative;
     border: var(--accent-color) solid 2px;
+    color: var(--text-color);
   }
   .dialog-tab-list label:hover, .dialog-tab-list label:focus, .dialog-tab-list label:active {
     background-color: rgb(var(--accent-color-rgb)/0.25);
   }
   .dialog-tab-list label:has(.is-active) {
     background-color: var(--accent-color);
+    color: var(--bg-color);
   }
   .dialog-tab-list label:not(:last-child) {
     margin-left: -2px;
